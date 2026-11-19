@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Icon</title>
+<style>
+  html, body { margin: 0; overflow: hidden; background: #120b0f; }
+  img { display: block; }
+</style>
+</head>
+<body>
+  <img src="../../public/favicon.svg" alt="" id="icon">
+  <script>
+    // Headless Chrome enforces a minimum viewport, so size the icon in px from ?size=.
+    var size = parseInt(new URLSearchParams(location.search).get('size'), 10) || 512;
+    var img = document.getElementById('icon');
+    img.width = size;
+    img.height = size;
+  </script>
+</body>
+</html>

@@ -1,4 +1,19 @@
 {
+  "name": "afterglow-spa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Afterglow Spa — static, SEO-first website (no runtime dependencies for the site itself).",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs",
+    "start": "node scripts/build.mjs && node scripts/serve.mjs",
+    "images": "node scripts/render-images.mjs",
+    "test": "node --test"
+  },
   "dependencies": {
     "railway": "^3.17.0"
   }

@@ -51,21 +51,21 @@ function sessionFields() {
       ${field({ id: 'bk-date', label: 'Preferred date', control: html`<input id="bk-date" name="date" type="date" required aria-describedby="bk-date-error">` })}
       ${field({ id: 'bk-time', label: 'Preferred time', control: html`<select id="bk-time" name="time" required aria-describedby="bk-time-error"><option value="">Choose a time…</option>${TIME_SLOTS.map((s) => html`<option>${s}</option>`)}</select>` })}
     </div>
-    ${field({ id: 'bk-therapist', label: 'Therapist preference', control: html`<select id="bk-therapist" name="therapist">${THERAPIST_PREFS.map((s) => html`<option>${s}</option>`)}</select>` })}
+    ${field({ id: 'bk-therapist', label: 'Therapist preference', control: html`<select id="bk-therapist" name="therapist" aria-describedby="bk-therapist-error">${THERAPIST_PREFS.map((s) => html`<option>${s}</option>`)}</select>` })}
     ${field({ id: 'bk-notes', label: 'Anything we should know? (optional)', hint: 'First visit, injuries, pressure preferences, boundaries…', control: html`<textarea id="bk-notes" name="notes" rows="4" maxlength="${FIELD_LIMITS.notes}" aria-describedby="bk-notes-hint bk-notes-error"></textarea>` })}`;
 }
 
 function bookingForm() {
   const endpoint = SITE.booking.endpoint;
   const fallbackAction = mailHref('Booking request');
-  return html`<form class="booking-form" method="post" action="${endpoint || fallbackAction}" ${endpoint ? '' : html`enctype="text/plain"`} novalidate
+  return html`<form class="booking-form" method="post" action="${endpoint || fallbackAction}" ${endpoint ? '' : html`enctype="text/plain"`}
       data-booking-form data-endpoint="${endpoint}" data-email="${SITE.contact.email}"
       data-min-age="${SITE.booking.minimumAge}" data-limits="${JSON.stringify(FIELD_LIMITS)}">
     ${contactFields()}
     ${sessionFields()}
     <div class="field field--hp" aria-hidden="true">
-      <label for="bk-company">Company</label>
-      <input id="bk-company" name="company" type="text" tabindex="-1" autocomplete="off">
+      <label for="bk-hp">Leave this field empty</label>
+      <input id="bk-hp" name="ag_hp_field" type="text" tabindex="-1" autocomplete="off">
     </div>
     <div class="field field--check">
       <input id="bk-consent" name="consent" type="checkbox" required aria-describedby="bk-consent-error">

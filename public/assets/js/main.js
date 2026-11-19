@@ -4,8 +4,15 @@
 
   var AGE_KEY = 'afterglow-age-confirmed';
   var SCROLLED_OFFSET = 24;
+  var DESKTOP_NAV_QUERY = '(min-width: 921px)';
   var REVEAL_START = 'top 86%';
   var WORD_DIM_OPACITY = 0.14;
+  var MOTION = Object.freeze({
+    introDuration: 1.3, introStagger: 0.12, introOffsetY: 34, introDelay: 0.1,
+    revealDuration: 1.1, revealStagger: 0.1, revealOffsetY: 40,
+    wordStagger: 0.05, wordScrub: 0.6, lineScrub: 0.8,
+    parallaxPercent: 12, parallaxStagger: 0.04, heroDriftPercent: -14, heroFadeTo: 0.2,
+  });
   var root = document.documentElement;
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -81,6 +88,9 @@
     nav.addEventListener('click', function (e) {
       if (e.target.closest('a')) setOpen(false);
     });
+    window.matchMedia(DESKTOP_NAV_QUERY).addEventListener('change', function (e) {
+      if (e.matches) setOpen(false);
+    });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && nav.classList.contains('is-open')) {
         setOpen(false);
@@ -120,18 +130,20 @@
   function playIntro(gsap) {
     var items = document.querySelectorAll('[data-hero-item]');
     if (!items.length) return;
-    gsap.fromTo(items, { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 1.3, ease: 'power3.out', stagger: 0.12, delay: 0.1 });
+    gsap.fromTo(items, { opacity: 0, y: MOTION.introOffsetY }, {
+      opacity: 1, y: 0, duration: MOTION.introDuration, ease: 'power3.out', stagger: MOTION.introStagger, delay: MOTION.introDelay,
+    });
   }
 
   function animateReveals(gsap, ScrollTrigger) {
     var els = gsap.utils.toArray('[data-reveal]');
     if (!els.length) return;
-    gsap.set(els, { opacity: 0, y: 40 });
+    gsap.set(els, { opacity: 0, y: MOTION.revealOffsetY });
     ScrollTrigger.batch(els, {
       start: REVEAL_START,
       once: true,
       onEnter: function (batch) {
-        gsap.to(batch, { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', stagger: 0.1, overwrite: true });
+        gsap.to(batch, { opacity: 1, y: 0, duration: MOTION.revealDuration, ease: 'power3.out', stagger: MOTION.revealStagger, overwrite: true });
       },
     });
   }
@@ -142,8 +154,8 @@
       gsap.fromTo(words, { opacity: WORD_DIM_OPACITY }, {
         opacity: 1,
         ease: 'none',
-        stagger: 0.05,
-        scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: 0.6 },
+        stagger: MOTION.wordStagger,
+        scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: MOTION.wordScrub },
       });
     });
   }
@@ -154,22 +166,22 @@
       gsap.fromTo(fill, { scaleY: 0 }, {
         scaleY: 1,
         ease: 'none',
-        scrollTrigger: { trigger: '[data-journey]', start: 'top 60%', end: 'bottom 70%', scrub: 0.8 },
+        scrollTrigger: { trigger: '[data-journey]', start: 'top 60%', end: 'bottom 70%', scrub: MOTION.lineScrub },
       });
     }
     gsap.utils.toArray('[data-parallax]').forEach(function (el) {
-      gsap.fromTo(el.children, { yPercent: 12 }, {
-        yPercent: -12,
+      gsap.fromTo(el.children, { yPercent: MOTION.parallaxPercent }, {
+        yPercent: -MOTION.parallaxPercent,
         ease: 'none',
-        stagger: 0.04,
+        stagger: MOTION.parallaxStagger,
         scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
       });
     });
     var hero = document.querySelector('.hero__content');
     if (hero) {
       gsap.to(hero, {
-        yPercent: -14,
-        opacity: 0.2,
+        yPercent: MOTION.heroDriftPercent,
+        opacity: MOTION.heroFadeTo,
         ease: 'none',
         scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
       });
@@ -184,15 +196,25 @@
       if (!reducedMotion) console.warn('Afterglow: GSAP unavailable — animations disabled.');
       return function () {};
     }
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.set('[data-hero-item]', { opacity: 0 });
-    animateReveals(gsap, ScrollTrigger);
-    animateManifesto(gsap);
-    animateScrubbed(gsap);
+    try {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.set('[data-hero-item]', { opacity: 0 });
+      animateReveals(gsap, ScrollTrigger);
+      animateManifesto(gsap);
+      animateScrubbed(gsap);
+    } catch (err) {
+      console.error('Afterglow: animation setup failed — showing content without motion.', err);
+      ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
+      gsap.set('[data-hero-item], [data-reveal], .word, [data-journey-fill], .hero__content', { clearProps: 'all' });
+      return function () {};
+    }
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
     }
-    return function () { playIntro(gsap); };
+    return function () {
+      ScrollTrigger.refresh(); // the age gate's scroll lock may have shifted trigger positions
+      playIntro(gsap);
+    };
   }
 
   /* ---------- Boot ---------- */

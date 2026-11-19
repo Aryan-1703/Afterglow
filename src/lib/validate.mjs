@@ -4,7 +4,8 @@
  */
 
 const E164 = /^\+[1-9]\d{6,14}$/;
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Excludes characters that would inject extra parameters into mailto: links.
+const EMAIL = /^[^\s@?&,;:<>"']+@[^\s@?&,;:<>"']+\.[^\s@?&,;:<>"']+$/;
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
 const DAYS = new Set(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
 const LEGAL_MIN_AGE = 18;

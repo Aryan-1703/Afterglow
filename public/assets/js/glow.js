@@ -24,10 +24,12 @@
     'void main(){',
     '  vec2 p = (gl_FragCoord.xy - 0.5*u_res) / u_res.y;',
     '  float aspect = u_res.x / u_res.y;',
+    '  float portrait = aspect < 1.0 ? 1.0 : 0.0;',
     '  float t = u_time * 0.035;',
-    '  vec2 q = vec2(fbm(p*1.4 + t), fbm(p*1.4 - t + 3.1));',
-    '  vec2 r = vec2(fbm(p*1.2 + 2.0*q + vec2(1.7,9.2) + t*1.5), fbm(p*1.2 + 2.0*q + vec2(8.3,2.8) - t));',
-    '  float f = fbm(p*1.1 + 2.2*r);',
+    '  vec2 n = p * mix(1.0, 1.7, portrait);', // sample more noise on narrow screens
+    '  vec2 q = vec2(fbm(n*1.4 + t), fbm(n*1.4 - t + 3.1));',
+    '  vec2 r = vec2(fbm(n*1.2 + 2.0*q + vec2(1.7,9.2) + t*1.5), fbm(n*1.2 + 2.0*q + vec2(8.3,2.8) - t));',
+    '  float f = fbm(n*1.1 + 2.2*r);',
     '  vec2 focus = vec2(min(0.45, 0.5*aspect - 0.05), aspect < 1.0 ? 0.28 : 0.12) + u_mouse*0.08;',
     '  float glow = smoothstep(1.3, 0.0, length(p - focus));',
     '  vec3 ink = vec3(0.071,0.043,0.059); vec3 wine = vec3(0.45,0.13,0.26);',
@@ -38,7 +40,8 @@
     '  col = mix(col, gold, pow(smoothstep(0.7, 1.15, f + r.x*0.4), 2.0) * glow * 0.75);',
     '  col *= 0.3 + 0.9*glow;',
     '  float shade = smoothstep(-0.3, 0.9, p.x/max(aspect,0.6) + 0.35);',
-    '  col = mix(ink, col, 0.22 + 0.78*shade);',
+    '  float shadeAmt = mix(0.78, 0.5, portrait);', // text spans full width on phones
+    '  col = mix(ink, col, (1.0 - shadeAmt) + shadeAmt*shade);',
     '  gl_FragColor = vec4(col, 1.0);',
     '}',
   ].join('\n');

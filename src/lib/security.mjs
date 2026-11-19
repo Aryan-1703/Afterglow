@@ -27,26 +27,37 @@ export function cspDirectives() {
     "img-src 'self' data:",
     "font-src 'self'",
     `connect-src 'self'${form ? ` ${form}` : ''}`,
-    `form-action 'self'${form ? ` ${form}` : ''}`,
+    `form-action 'self' mailto:${form ? ` ${form}` : ''}`,
     "manifest-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
   ].join('; ');
 }
 
-/** `_headers` file understood by Netlify and Cloudflare Pages. */
+/** Response headers for every page — used by scripts/serve.mjs and the `_headers` file. */
+export function securityHeaders({ https = true } = {}) {
+  return Object.freeze({
+    'Content-Security-Policy': `${cspDirectives()}; frame-ancestors 'none'${https ? '; upgrade-insecure-requests' : ''}`,
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+    'Cross-Origin-Opener-Policy': 'same-origin',
+    'Cross-Origin-Resource-Policy': 'same-origin',
+    // No includeSubDomains: other subdomains you may run aren't guaranteed to be HTTPS.
+    ...(https ? { 'Strict-Transport-Security': 'max-age=31536000' } : {}),
+  });
+}
+
+export const ASSET_CACHE_CONTROL = 'public, max-age=31536000, immutable';
+export const SHORT_ASSET_CACHE_CONTROL = 'public, max-age=86400, must-revalidate';
+export const PAGE_CACHE_CONTROL = 'public, max-age=0, must-revalidate';
+
+/** `_headers` file understood by Netlify and Cloudflare Pages (if you host there instead). */
 export function headersFile() {
+  const pageHeaders = Object.entries(securityHeaders()).map(([k, v]) => `  ${k}: ${v}`);
   return [
-    '/*',
-    `  Content-Security-Policy: ${cspDirectives()}; frame-ancestors 'none'; upgrade-insecure-requests`,
-    '  X-Content-Type-Options: nosniff',
-    '  Referrer-Policy: strict-origin-when-cross-origin',
-    '  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()',
-    '  Strict-Transport-Security: max-age=31536000; includeSubDomains',
-    '  Cross-Origin-Opener-Policy: same-origin',
-    '',
-    '/assets/*',
-    '  Cache-Control: public, max-age=31536000, immutable',
-    '',
+    '/*', ...pageHeaders, '',
+    '/assets/*', `  Cache-Control: ${SHORT_ASSET_CACHE_CONTROL}`, '',
+    '/assets/fonts/*', `  Cache-Control: ${ASSET_CACHE_CONTROL}`, '',
   ].join('\n');
 }
