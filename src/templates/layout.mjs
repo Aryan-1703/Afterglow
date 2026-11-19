@@ -5,6 +5,7 @@ import { HEAD_SCRIPT, cspDirectives } from '../lib/security.mjs';
 import { asset } from '../lib/assets.mjs';
 import { addressLine, hoursRows, mailHref, mapsHref, telHref } from '../lib/format.mjs';
 import { TREATMENTS } from '../content/treatments.mjs';
+import { sunMark } from './components.mjs';
 
 const FONT_PRELOADS = Object.freeze([
   '/assets/fonts/cormorant-garamond-latin-400-italic.woff2',
@@ -33,13 +34,14 @@ function head({ seo, schema }) {
 
 function wordmark() {
   return html`<a class="wordmark" href="/" aria-label="${SITE.name} — home">
-    <span class="wordmark__main">Afterglow</span><span class="wordmark__sub">spa</span>
+    ${sunMark('sun-mark wordmark__mark')}<span class="wordmark__main">Afterglow</span><span class="wordmark__sub">spa</span>
   </a>`;
 }
 
 function header(currentPath) {
   const link = (item) => html`<li><a href="${item.href}"${currentPath.startsWith(item.href) ? raw(' aria-current="page"') : ''}>${item.label}</a></li>`;
   return html`<header class="site-header" data-header>
+    <span class="scroll-progress" aria-hidden="true" data-progress></span>
     <div class="site-header__inner">
       ${wordmark()}
       <nav class="site-nav" id="site-nav" aria-label="Main">
@@ -84,6 +86,7 @@ function footer() {
   return html`<footer class="site-footer">
     <div class="container">
       ${footerColumns()}
+      <p class="footer-mark" aria-hidden="true" data-footer-mark>Afterglow</p>
       <div class="footer-base">
         <p>© ${year} ${SITE.name}. All treatments are consent-led and exactly as described.</p>
         <ul>
@@ -100,6 +103,7 @@ function ageGate() {
   const age = SITE.booking.minimumAge;
   return html`<div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title" aria-describedby="age-desc" data-age-gate data-nosnippet>
     <div class="age-gate__panel">
+      ${sunMark('sun-mark age-gate__mark')}
       <p class="eyebrow">${SITE.name}</p>
       <p class="age-gate__title" id="age-title">Are you ${age} or older?</p>
       <p id="age-desc">This website describes sensual services for adults only. Please confirm you are at least ${age} years old to continue.</p>
@@ -116,6 +120,7 @@ function scripts(extra) {
     <script src="${asset('/assets/vendor/gsap.min.js')}" defer></script>
     <script src="${asset('/assets/vendor/ScrollTrigger.min.js')}" defer></script>
     <script src="${asset('/assets/js/main.js')}" defer></script>
+    <script src="${asset('/assets/js/fx.js')}" defer></script>
     ${extra.map((src) => html`<script src="${asset(src)}" defer></script>`)}`;
 }
 
@@ -132,6 +137,7 @@ export function documentShell({ seo, schema, body, bodyClass = '', scripts: extr
     ${header(seo.path)}
     <main id="main">${body}</main>
     ${footer()}
+    <div class="cursor-glow" aria-hidden="true" data-cursor-glow></div>
     ${ageGate()}
     ${scripts(extra)}
   </body>

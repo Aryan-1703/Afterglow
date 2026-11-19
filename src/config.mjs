@@ -16,7 +16,7 @@ export const SITE = deepFreeze({
   url: 'https://www.example.com',
   lang: 'en',
   locale: 'en_CA',
-  themeColor: '#120b0f',
+  themeColor: '#0d0812',
   foundingYear: '2026',
 
   // Tells search engines this is an adult (18+) business so SafeSearch can classify

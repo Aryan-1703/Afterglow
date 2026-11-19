@@ -5,7 +5,7 @@ import { breadcrumbSchema, businessSchema, faqSchema, webPageSchema } from '../l
 import { TREATMENTS } from '../content/treatments.mjs';
 import { AMENITIES, ETIQUETTE, FAQS, PILLARS } from '../content/copy.mjs';
 import { documentShell } from '../templates/layout.mjs';
-import { checkList, ctaBand, faqList, pageHero, sectionHead } from '../templates/components.mjs';
+import { checkList, ctaBand, faqList, pageHero, pillarGrid, sectionHead } from '../templates/components.mjs';
 
 const CITY = SITE.address.city;
 const HOME_CRUMB = Object.freeze({ name: 'Home', path: '/' });
@@ -50,19 +50,20 @@ export function spaPage() {
         </div>
         <div class="space__visual space__visual--tall" aria-hidden="true" data-parallax>
           <div class="orb orb--rose"></div><div class="orb orb--ember"></div><div class="orb orb--gold"></div>
+          <span class="space__caption">Est. ${SITE.foundingYear}</span>
         </div>
       </div>
     </section>
     <section class="section" aria-labelledby="suites-title">
       <div class="container container--narrow">
-        ${sectionHead({ eyebrow: 'The suites', title: 'Everything you need, nothing you don’t', id: 'suites-title', lead: 'Each private suite is prepared freshly for every guest.' })}
+        ${sectionHead({ eyebrow: 'The suites', title: html`Everything you need, <em>nothing you don’t</em>`, id: 'suites-title', lead: 'Each private suite is prepared freshly for every guest.' })}
         <div data-reveal>${checkList(AMENITIES, 'check-list check-list--cols')}</div>
       </div>
     </section>
     <section class="section" aria-labelledby="team-title">
       <div class="container split">
         <div>
-          ${sectionHead({ eyebrow: 'Our therapists', title: 'Skilled hands, kind presence', id: 'team-title' })}
+          ${sectionHead({ eyebrow: 'Our therapists', title: html`Skilled hands, <em>kind presence</em>`, id: 'team-title' })}
           <p class="prose" data-reveal>Our therapists are the heart of Afterglow. They are chosen for their skill, their warmth and their deep respect for boundaries — yours and their own.</p>
         </div>
         <div data-reveal>${checkList(THERAPIST_NOTES)}</div>
@@ -70,8 +71,8 @@ export function spaPage() {
     </section>
     <section class="section" aria-labelledby="standards-title">
       <div class="container">
-        ${sectionHead({ eyebrow: 'Our standards', title: 'Sensual, never careless', id: 'standards-title' })}
-        <div class="pillars">${PILLARS.map((p) => html`<div class="pillar" data-reveal><h3>${p.title}</h3><p>${p.text}</p></div>`)}</div>
+        ${sectionHead({ eyebrow: 'Our standards', title: html`Sensual, <em>never careless</em>`, id: 'standards-title' })}
+        ${pillarGrid(PILLARS)}
       </div>
     </section>
     ${ctaBand()}`;

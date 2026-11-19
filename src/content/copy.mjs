@@ -20,10 +20,10 @@ export const JOURNEY = deepFreeze([
 ]);
 
 export const PILLARS = deepFreeze([
-  { title: 'Consent first', text: 'Preferences and boundaries are agreed before every session and can change at any moment.' },
-  { title: `Strictly ${MIN_AGE}+`, text: `Every guest must be ${MIN_AGE} or older. We may ask for photo ID at reception.` },
-  { title: 'Total discretion', text: 'Private entrance, staggered appointments and guest details that are never shared.' },
-  { title: 'Spotless hygiene', text: 'Fresh linens for every guest, sanitised suites and single-use amenities.' },
+  { icon: 'heart', title: 'Consent first', text: 'Preferences and boundaries are agreed before every session and can change at any moment.' },
+  { icon: 'shield', title: `Strictly ${MIN_AGE}+`, text: `Every guest must be ${MIN_AGE} or older. We may ask for photo ID at reception.` },
+  { icon: 'lock', title: 'Total discretion', text: 'Private entrance, staggered appointments and guest details that are never shared.' },
+  { icon: 'drop', title: 'Spotless hygiene', text: 'Fresh linens for every guest, sanitised suites and single-use amenities.' },
 ]);
 
 export const AMENITIES = deepFreeze([

@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <radialGradient id="halo" cx="50%" cy="66%" r="50%">
-      <stop offset="0" stop-color="#ffd3a1"/>
-      <stop offset=".45" stop-color="#ef8c5d"/>
-      <stop offset="1" stop-color="#c96590" stop-opacity="0"/>
+      <stop offset="0" stop-color="#ffe1b8"/>
+      <stop offset=".45" stop-color="#ff9d7c"/>
+      <stop offset="1" stop-color="#c257b0" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="sun" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f7b67a"/>
-      <stop offset="1" stop-color="#c96590"/>
+      <stop offset="0" stop-color="#ffc58e"/>
+      <stop offset="1" stop-color="#c257b0"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="14" fill="#120b0f"/>
+  <rect width="64" height="64" rx="14" fill="#0d0812"/>
   <circle cx="32" cy="41" r="27" fill="url(#halo)" opacity=".6"/>
   <path d="M13 41a19 19 0 0 1 38 0z" fill="url(#sun)"/>
-  <rect x="9" y="45" width="46" height="2.4" rx="1.2" fill="#ddb67f"/>
+  <rect x="9" y="45" width="46" height="2.4" rx="1.2" fill="#ebcb94"/>
 </svg>

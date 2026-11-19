@@ -3,15 +3,20 @@
   'use strict';
 
   var AGE_KEY = 'afterglow-age-confirmed';
+  var AGE_CONFIRMED_EVENT = 'afterglow:age-confirmed';
   var SCROLLED_OFFSET = 24;
   var DESKTOP_NAV_QUERY = '(min-width: 921px)';
-  var REVEAL_START = 'top 86%';
+  var REVEAL_START = 'top 88%';
+  var STEP_LIT_START = 'top 62%';
   var WORD_DIM_OPACITY = 0.14;
   var MOTION = Object.freeze({
-    introDuration: 1.3, introStagger: 0.12, introOffsetY: 34, introDelay: 0.1,
-    revealDuration: 1.1, revealStagger: 0.1, revealOffsetY: 40,
+    introDelay: 0.15, lineDuration: 1.35, lineStagger: 0.11, itemsAt: 0.45,
+    introDuration: 1.2, introStagger: 0.1, introOffsetY: 30,
+    revealDuration: 1.1, revealStagger: 0.09, revealOffsetY: 36,
     wordStagger: 0.05, wordScrub: 0.6, lineScrub: 0.8,
-    parallaxPercent: 12, parallaxStagger: 0.04, heroDriftPercent: -14, heroFadeTo: 0.2,
+    // Numeric scrub = eased catch-up; avoids stepping with each mouse-wheel notch.
+    parallaxScrub: 1, parallaxPercent: 12, parallaxStagger: 0.04,
+    heroScrub: 0.6, heroDriftPercent: -14, heroFadeTo: 0.2, heroVisualDriftPercent: 10,
   });
   var root = document.documentElement;
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -52,6 +57,10 @@
   function initAgeGate(onConfirmed) {
     var gate = document.querySelector('[data-age-gate]');
     if (!gate || root.classList.contains('age-ok')) {
+      if (!root.classList.contains('age-ok')) {
+        root.classList.add('age-ok'); // no gate on this page: nothing to wait for
+        document.dispatchEvent(new CustomEvent(AGE_CONFIRMED_EVENT));
+      }
       onConfirmed();
       return;
     }
@@ -63,6 +72,7 @@
       rememberAge();
       root.classList.add('age-ok');
       setBackgroundInert(false);
+      document.dispatchEvent(new CustomEvent(AGE_CONFIRMED_EVENT)); // glow.js waits for this
       var main = document.getElementById('main');
       if (main) {
         main.setAttribute('tabindex', '-1');
@@ -102,7 +112,13 @@
   function initHeader() {
     var header = document.querySelector('[data-header]');
     if (!header) return;
-    var update = function () { header.classList.toggle('is-scrolled', window.scrollY > SCROLLED_OFFSET); };
+    var scrolled = null;
+    var update = function () {
+      var next = window.scrollY > SCROLLED_OFFSET;
+      if (next === scrolled) return; // only touch the DOM when the state flips
+      scrolled = next;
+      header.classList.toggle('is-scrolled', next);
+    };
     update();
     window.addEventListener('scroll', update, { passive: true });
   }
@@ -128,11 +144,19 @@
   }
 
   function playIntro(gsap) {
+    var lines = document.querySelectorAll('[data-hero-line]');
     var items = document.querySelectorAll('[data-hero-item]');
-    if (!items.length) return;
-    gsap.fromTo(items, { opacity: 0, y: MOTION.introOffsetY }, {
-      opacity: 1, y: 0, duration: MOTION.introDuration, ease: 'power3.out', stagger: MOTION.introStagger, delay: MOTION.introDelay,
-    });
+    var tl = gsap.timeline({ delay: MOTION.introDelay });
+    if (lines.length) {
+      tl.fromTo(lines, { yPercent: 105 }, {
+        yPercent: 0, duration: MOTION.lineDuration, ease: 'power4.out', stagger: MOTION.lineStagger,
+      }, 0);
+    }
+    if (items.length) {
+      tl.fromTo(items, { opacity: 0, y: MOTION.introOffsetY }, {
+        opacity: 1, y: 0, duration: MOTION.introDuration, ease: 'power3.out', stagger: MOTION.introStagger,
+      }, lines.length ? MOTION.itemsAt : 0);
+    }
   }
 
   function animateReveals(gsap, ScrollTrigger) {
@@ -143,7 +167,10 @@
       start: REVEAL_START,
       once: true,
       onEnter: function (batch) {
-        gsap.to(batch, { opacity: 1, y: 0, duration: MOTION.revealDuration, ease: 'power3.out', stagger: MOTION.revealStagger, overwrite: true });
+        gsap.to(batch, {
+          opacity: 1, y: 0, duration: MOTION.revealDuration, ease: 'power3.out', stagger: MOTION.revealStagger,
+          overwrite: true, clearProps: 'transform', // hand transform back to CSS hover states
+        });
       },
     });
   }
@@ -160,7 +187,7 @@
     });
   }
 
-  function animateScrubbed(gsap) {
+  function animateJourney(gsap, ScrollTrigger) {
     var fill = document.querySelector('[data-journey-fill]');
     if (fill) {
       gsap.fromTo(fill, { scaleY: 0 }, {
@@ -169,24 +196,40 @@
         scrollTrigger: { trigger: '[data-journey]', start: 'top 60%', end: 'bottom 70%', scrub: MOTION.lineScrub },
       });
     }
+    gsap.utils.toArray('.journey__step').forEach(function (step) {
+      ScrollTrigger.create({
+        trigger: step,
+        start: STEP_LIT_START,
+        onEnter: function () { step.classList.add('is-lit'); },
+        onLeaveBack: function () { step.classList.remove('is-lit'); },
+      });
+    });
+  }
+
+  function animateParallax(gsap) {
     gsap.utils.toArray('[data-parallax]').forEach(function (el) {
       gsap.fromTo(el.children, { yPercent: MOTION.parallaxPercent }, {
         yPercent: -MOTION.parallaxPercent,
         ease: 'none',
         stagger: MOTION.parallaxStagger,
-        scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
+        scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: MOTION.parallaxScrub },
       });
     });
-    var hero = document.querySelector('.hero__content');
-    if (hero) {
-      gsap.to(hero, {
-        yPercent: MOTION.heroDriftPercent,
-        opacity: MOTION.heroFadeTo,
-        ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
-      });
+  }
+
+  function animateHeroDrift(gsap) {
+    var heroScroll = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: MOTION.heroScrub };
+    var content = document.querySelector('.hero__content');
+    if (content) {
+      gsap.to(content, { yPercent: MOTION.heroDriftPercent, opacity: MOTION.heroFadeTo, ease: 'none', scrollTrigger: heroScroll });
+    }
+    var visual = document.querySelector('[data-hero-visual]');
+    if (visual) {
+      gsap.to(visual, { yPercent: MOTION.heroVisualDriftPercent, ease: 'none', scrollTrigger: heroScroll });
     }
   }
+
+  var ANIMATED_SELECTORS = '[data-hero-item], [data-hero-line], [data-reveal], .word, [data-journey-fill], .hero__content, [data-hero-visual]';
 
   function initAnimations() {
     var gsap = window.gsap;
@@ -198,14 +241,19 @@
     }
     try {
       gsap.registerPlugin(ScrollTrigger);
-      gsap.set('[data-hero-item]', { opacity: 0 });
+      var heroItems = document.querySelectorAll('[data-hero-item]');
+      var heroLines = document.querySelectorAll('[data-hero-line]'); // home page only
+      if (heroItems.length) gsap.set(heroItems, { opacity: 0 });
+      if (heroLines.length) gsap.set(heroLines, { yPercent: 105 });
       animateReveals(gsap, ScrollTrigger);
       animateManifesto(gsap);
-      animateScrubbed(gsap);
+      animateJourney(gsap, ScrollTrigger);
+      animateParallax(gsap);
+      animateHeroDrift(gsap);
     } catch (err) {
       console.error('Afterglow: animation setup failed — showing content without motion.', err);
       ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
-      gsap.set('[data-hero-item], [data-reveal], .word, [data-journey-fill], .hero__content', { clearProps: 'all' });
+      gsap.set(ANIMATED_SELECTORS, { clearProps: 'all' });
       return function () {};
     }
     if (document.fonts && document.fonts.ready) {
