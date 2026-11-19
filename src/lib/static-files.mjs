@@ -3,19 +3,12 @@ import { SITE } from '../config.mjs';
 import { absoluteUrl } from './format.mjs';
 import { escapeHtml } from './html.mjs';
 
-const DEFAULT_PRIORITY = 0.7;
-const HOME_PRIORITY = 1.0;
-
-function priorityFor(pagePath, table) {
-  if (pagePath === '/') return HOME_PRIORITY;
-  const match = table.find(([prefix]) => pagePath.startsWith(prefix));
-  return match ? match[1] : DEFAULT_PRIORITY;
-}
-
-export function sitemapXml(paths, priorityTable, lastmod) {
-  const urls = paths
-    .map((p) => `  <url>\n    <loc>${escapeHtml(absoluteUrl(p))}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <priority>${priorityFor(p, priorityTable).toFixed(1)}</priority>\n  </url>`)
-    .join('\n');
+/**
+ * <lastmod> and <priority> are deliberately omitted: Google ignores priority, and
+ * distrusts lastmod values that change on every build without a content change.
+ */
+export function sitemapXml(paths) {
+  const urls = paths.map((p) => `  <url><loc>${escapeHtml(absoluteUrl(p))}</loc></url>`).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 

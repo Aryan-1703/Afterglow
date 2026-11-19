@@ -41,7 +41,8 @@ npm run images   # re-render social image + icons (needs Chrome)
 2. Claim a **Google Business Profile** if your category and jurisdiction allow it. It is the biggest driver of local "near me" traffic. Keep your name, address and phone **identical** everywhere.
 3. List the spa in reputable local and adult-friendly directories, using the same name, address and phone.
 4. Ask happy guests for genuine reviews. Never post fake ones.
-5. Note that Google Ads and Meta generally don't allow erotic-massage advertising, so organic SEO and directories are your main channels.
+5. Note that Google Ads and Meta heavily restrict sensual-massage advertising, so organic SEO and directories are your main channels.
+6. **Canada:** the Criminal Code (s. 286.4) prohibits advertising sexual services for payment, and Brampton licenses massage and body-rub businesses. The copy is written as a sensual massage spa with no explicit wording. Keep it that way, and have a lawyer review it and confirm your municipal licence before launch.
 
 ## Structure
 

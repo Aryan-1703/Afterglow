@@ -157,8 +157,19 @@ function main() {
     process.exitCode = 1;
     return;
   }
-  const port = parsePort(process.env.PORT ?? process.argv[2]);
+  let port;
+  try {
+    port = parsePort(process.env.PORT || process.argv[2]);
+  } catch (err) {
+    console.error(err.message);
+    process.exitCode = 1;
+    return;
+  }
   const server = createServer({ maxHeaderSize: MAX_HEADER_BYTES }, createHandler());
+  server.on('error', (err) => {
+    console.error(`Server error: ${err.code ?? err.message}`);
+    process.exitCode = 1;
+  });
   server.headersTimeout = TIMEOUTS.headersMs;
   server.requestTimeout = TIMEOUTS.requestMs;
   server.keepAliveTimeout = TIMEOUTS.keepAliveMs;

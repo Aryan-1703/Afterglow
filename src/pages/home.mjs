@@ -12,8 +12,8 @@ const HOME_FAQ_COUNT = 4;
 
 const SEO = Object.freeze({
   path: '/',
-  title: `Afterglow Spa | Erotic Spa & Sensual Massage in ${CITY}`,
-  description: `Afterglow is a discreet erotic spa in ${CITY} for sensual, tantric and couples massage. Private candlelit suites, warm oil, consent-led rituals. Strictly 18+.`,
+  title: `Afterglow Spa | Sensual & Tantric Massage in ${CITY}`,
+  description: `Afterglow is a discreet sensual massage spa in ${CITY} for tantric, couples and four-hands massage. Private candlelit suites, warm oil, consent-led. Strictly 18+.`,
 });
 
 function hero() {
@@ -22,8 +22,8 @@ function hero() {
     <div class="hero__fallback" aria-hidden="true"></div>
     <div class="hero__grain" aria-hidden="true"></div>
     <div class="container hero__content">
-      <p class="eyebrow" data-hero-item>Erotic spa · ${CITY}</p>
-      <h1 class="display-hero" id="hero-title" data-hero-item>An erotic spa for <em>slow,</em> sensual touch</h1>
+      <p class="eyebrow" data-hero-item>Sensual massage spa · ${CITY}</p>
+      <h1 class="display-hero" id="hero-title" data-hero-item>A massage spa for <em>slow,</em> sensual touch</h1>
       <p class="lead hero__lead" data-hero-item>Private suites, warm oil and unhurried hands — sensual and tantric massage that leaves a soft glow long after you’ve gone home.</p>
       <div class="btn-row" data-hero-item>
         <a class="btn btn--glow" href="/book/">Reserve a ritual</a>

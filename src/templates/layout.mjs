@@ -58,7 +58,7 @@ function footerColumns() {
   return html`<div class="footer-grid">
       <div>
         ${wordmark()}
-        <p class="footer-tag">An erotic spa for slow, sensual touch in ${SITE.address.city}. Strictly ${SITE.booking.minimumAge}+.</p>
+        <p class="footer-tag">A sensual massage spa for slow, unhurried touch in ${SITE.address.city}. Strictly ${SITE.booking.minimumAge}+.</p>
       </div>
       <div>
         <h2 class="footer-h">Visit</h2>

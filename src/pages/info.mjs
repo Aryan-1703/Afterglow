@@ -21,7 +21,7 @@ const SPA_SEO = Object.freeze({
 });
 
 const SPA_STORY = Object.freeze([
-  'Afterglow began with a simple idea: that sensual touch deserves the same care, craft and calm as the world’s best spas. No neon, no rush, no awkwardness — just a warm, beautiful space where adults can relax into pleasure on their own terms.',
+  'Afterglow began with a simple idea: that sensual touch deserves the same care, craft and calm as the world’s best spas. No neon, no rush, no awkwardness — just a warm, beautiful space where adults can relax completely, on their own terms.',
   'Every detail is designed to help you let go. Light is low and amber. Rooms are warm. Music is slow. And every session begins with a conversation, because feeling safe is what makes it possible to feel everything else.',
 ]);
 
@@ -38,7 +38,7 @@ export function spaPage() {
     ${pageHero({
       eyebrow: 'The spa',
       title: 'A sanctuary for slow, sensual touch',
-      lead: `Afterglow is a private erotic spa in ${CITY} — built around warmth, discretion and the art of unhurried massage.`,
+      lead: `Afterglow is a private sensual massage spa in ${CITY} — built around warmth, discretion and the art of unhurried massage.`,
       accent: 'rose',
       crumbs,
     })}
@@ -124,8 +124,8 @@ export function etiquettePage() {
 
 const FAQ_SEO = Object.freeze({
   path: '/faq/',
-  title: `Erotic Spa FAQ: First Visit, Etiquette & Booking | Afterglow`,
-  description: `Answers about visiting Afterglow, an erotic spa in ${CITY}: what to expect, age policy, couples, discretion, what to bring and how to book.`,
+  title: `Sensual Massage FAQ: First Visit, Etiquette & Booking | Afterglow`,
+  description: `Answers about visiting Afterglow, a sensual massage spa in ${CITY}: what to expect, age policy, couples, discretion, what to bring and how to book.`,
 });
 
 export function faqPage() {

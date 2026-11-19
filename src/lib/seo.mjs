@@ -17,7 +17,7 @@ export function metaTags({ title, description, path, ogType = 'website', noindex
   return html`
     <title>${title}</title>
     <meta name="description" content="${description}">
-    <link rel="canonical" href="${url}">
+    ${noindex ? '' : html`<link rel="canonical" href="${url}">`}
     <meta name="robots" content="${robots}">
     ${SITE.adultRating ? html`<meta name="rating" content="adult">` : ''}
     <meta property="og:type" content="${ogType}">
@@ -43,7 +43,7 @@ function postalAddress() {
     streetAddress: a.street,
     addressLocality: a.city,
     addressRegion: a.region,
-    postalCode: a.postalCode,
+    ...(a.postalCode ? { postalCode: a.postalCode } : {}),
     addressCountry: a.country,
   };
 }
@@ -73,7 +73,7 @@ export function businessSchema(treatments) {
     '@type': 'DaySpa',
     '@id': BUSINESS_ID,
     name: SITE.name,
-    description: `Erotic spa in ${SITE.address.city} offering sensual, tantric, couples and four-hands massage in private suites. Strictly ${SITE.booking.minimumAge}+.`,
+    description: `Sensual massage spa in ${SITE.address.city} offering sensual, tantric, couples and four-hands massage in private suites. Strictly ${SITE.booking.minimumAge}+.`,
     url: absoluteUrl('/'),
     logo: absoluteUrl('/assets/img/icon-512.png'),
     image: absoluteUrl(OG_IMAGE.path),

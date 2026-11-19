@@ -63,6 +63,21 @@ test('rate limiter allows up to the limit then blocks until the window resets', 
   assert.equal(hit('ip', 1000).allowed, true);
 });
 
+test('rate limiter bounds memory: keys beyond maxKeys share one overflow bucket', () => {
+  const hit = createRateLimiter({ limit: 2, windowMs: 1000, maxKeys: 2 });
+  hit('a', 0);
+  hit('b', 0);
+  assert.equal(hit('spoof-1', 0).allowed, true);
+  assert.equal(hit('spoof-2', 0).allowed, true);
+  assert.equal(hit('spoof-3', 0).allowed, false, 'rotating keys must not bypass the limit');
+  assert.equal(hit('a', 0).allowed, true, 'existing keys keep their own bucket');
+});
+
+test('validateConfig rejects emails that would inject mailto parameters', () => {
+  const { errors } = validateConfig({ ...SITE, contact: { ...SITE.contact, email: 'a@b.com?cc=x@evil.test' } });
+  assert.ok(errors.some((e) => e.includes('email')));
+});
+
 test('rate limiter rejects invalid options', () => {
   assert.throws(() => createRateLimiter({ limit: 0, windowMs: 1000 }));
   assert.throws(() => createRateLimiter({ limit: 1, windowMs: -1 }));

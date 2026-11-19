@@ -12,7 +12,7 @@ import { PUBLIC_DIR } from '../src/lib/assets.mjs';
 import { headersFile } from '../src/lib/security.mjs';
 import { robotsTxt, sitemapXml, webManifest } from '../src/lib/static-files.mjs';
 import { toString } from '../src/lib/html.mjs';
-import { SITEMAP_PRIORITY, allPages } from '../src/pages/index.mjs';
+import { allPages } from '../src/pages/index.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 export const DEFAULT_OUT_DIR = path.join(ROOT, 'dist');
@@ -55,8 +55,7 @@ export function build({ outDir = DEFAULT_OUT_DIR, quiet = false } = {}) {
   pages.forEach((page) => writeOut(outDir, outputFileFor(page), toString(page.content)));
 
   const indexable = pages.map((p) => p.path).filter((p) => p !== NOT_FOUND_PATH);
-  const lastmod = new Date().toISOString().slice(0, 10);
-  writeOut(outDir, 'sitemap.xml', sitemapXml(indexable, SITEMAP_PRIORITY, lastmod));
+  writeOut(outDir, 'sitemap.xml', sitemapXml(indexable));
   writeOut(outDir, 'robots.txt', robotsTxt());
   writeOut(outDir, '_headers', headersFile());
   writeOut(outDir, 'site.webmanifest', webManifest());

@@ -14,6 +14,7 @@ const PLACEHOLDERS = Object.freeze([
   ['url', (s) => s.url.includes('example.com'), 'SITE.url is still example.com — set your real domain.'],
   ['city', (s) => s.address.city === 'Your City', 'SITE.address.city is a placeholder — this appears in every page title.'],
   ['street', (s) => s.address.street.includes('Placeholder'), 'SITE.address.street is a placeholder.'],
+  ['postal', (s) => !s.address.postalCode, 'SITE.address.postalCode is empty — a full address helps local search.'],
   ['phone', (s) => s.contact.phoneE164 === '+10000000000', 'SITE.contact.phoneE164 is a placeholder.'],
   ['email', (s) => s.contact.email.endsWith('@example.com'), 'SITE.contact.email is a placeholder.'],
   ['geo', (s) => s.geo === null, 'SITE.geo is not set — exact coordinates help Google Maps / local results.'],

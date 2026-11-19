@@ -15,27 +15,28 @@ export const SITE = deepFreeze({
   // Your live domain, no trailing slash. Canonical URLs + sitemap depend on it.
   url: 'https://www.example.com',
   lang: 'en',
-  locale: 'en_US',
+  locale: 'en_CA',
   themeColor: '#120b0f',
   foundingYear: '2026',
 
   // Tells search engines this is an adult (18+) business so SafeSearch can classify
-  // it correctly. Recommended for an erotic spa; see README before changing.
+  // it correctly. Recommended for an 18+ spa; see README before changing.
   adultRating: true,
 
   contact: {
-    phoneE164: '+10000000000', // used in tel: links + structured data
+    phoneE164: '+10000000000', // used in tel: links + structured data, e.g. '+19055551234'
     phoneDisplay: '+1 (000) 000-0000',
     email: 'hello@example.com',
     whatsappE164: '', // e.g. '+15551234567' — leave empty to hide WhatsApp
   },
 
   address: {
-    street: '00 Placeholder Street',
-    city: 'Your City',
-    region: 'Your State',
-    postalCode: '00000',
-    country: 'US', // ISO 3166-1 alpha-2
+    // Keep this EXACTLY the same as on Google Business Profile and every directory listing.
+    street: '33 McMurchy Ave N',
+    city: 'Brampton',
+    region: 'ON',
+    postalCode: '', // e.g. 'L6X 1X1' — add yours (look it up on canadapost.ca)
+    country: 'CA', // ISO 3166-1 alpha-2
     neighbourhood: '', // optional, e.g. 'Old Town' — helps local SEO
     directions: 'Discreet street-level entrance; ring the bell marked “A”.',
   },
@@ -51,7 +52,7 @@ export const SITE = deepFreeze({
     { days: ['Sunday'], opens: '14:00', closes: '21:00' },
   ],
 
-  currency: 'USD', // ISO 4217
+  currency: 'CAD', // ISO 4217
   priceRange: '$$$',
 
   // Full profile URLs. Empty strings are ignored.

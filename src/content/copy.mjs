@@ -74,8 +74,8 @@ export const ETIQUETTE = deepFreeze([
 
 export const FAQS = deepFreeze([
   {
-    q: 'What is an erotic spa?',
-    a: `An erotic spa offers sensual, full-body massage that goes beyond relaxation to awaken the senses. At Afterglow in ${CITY}, every treatment is consent-led, delivered by trained therapists in a private suite, and exactly as described on our menu.`,
+    q: 'What is a sensual massage?',
+    a: `A sensual massage is a slow, full-body massage with warm oil that goes beyond ordinary relaxation to awaken the senses. At Afterglow in ${CITY}, every treatment is consent-led, delivered by trained therapists in a private suite, and exactly as described on our menu.`,
   },
   {
     q: 'I’ve never done this before. Is Afterglow right for me?',

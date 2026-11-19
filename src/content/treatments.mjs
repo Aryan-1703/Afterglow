@@ -20,7 +20,7 @@ export const TREATMENTS = deepFreeze([
       'A slow, flowing full-body massage with warm oil — designed to melt tension and reawaken every sense.',
     intro: [
       'Our signature treatment and the perfect introduction to Afterglow. Long, unhurried strokes and warm, lightly scented oil move across the whole body, easing deep muscular tension while gently heightening sensation.',
-      'There is no script and no rush. Your therapist reads your breath and responds to it, building slowly from deep relaxation towards a softly charged, sensual stillness — and leaving plenty of time to drift back down.',
+      'There is no script and no rush. Your therapist reads your breath and responds to it, building slowly from deep relaxation towards a warm, sensual stillness — and leaving plenty of time to drift back down.',
     ],
     steps: [
       { title: 'Private consultation', text: 'A few quiet minutes to talk through preferences, pressure and boundaries.' },
@@ -52,10 +52,10 @@ export const TREATMENTS = deepFreeze([
     accent: 'rose',
     h1: `Tantric Massage Ritual in ${CITY}`,
     title: `Tantric Massage in ${CITY} | Afterglow Spa`,
-    metaDescription: `A breath-led tantric massage ritual in ${CITY}: meditative full-body touch, energy work and deep release in a private suite. Discreet, consent-led, 18+ only.`,
+    metaDescription: `A breath-led tantric massage ritual in ${CITY}: meditative full-body touch, energy work and deep relaxation in a private suite. Discreet, consent-led, 18+ only.`,
     tagline: 'Breath, presence and slow-rising energy.',
     summary:
-      'A meditative, breath-led ritual inspired by tantric tradition — awareness, energy and deep, rolling release.',
+      'A meditative, breath-led ritual inspired by tantric tradition — awareness, energy and deep, rolling calm.',
     intro: [
       'Tantra is less about technique and more about presence. This ritual begins with guided breathing to bring you fully into your body, then moves into slow, meditative full-body touch that encourages energy to rise and spread rather than rush.',
       'Expect long pauses, soft music and a deep sense of being held. Many guests describe it as the most profound relaxation they have ever felt — and the glow lasts for days.',

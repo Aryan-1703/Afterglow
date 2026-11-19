@@ -53,7 +53,8 @@ test('titles and descriptions are unique across pages', () => {
 
 test('canonical, Open Graph and Twitter tags point at the configured domain', () => {
   pages.forEach(({ path: p, html }) => {
-    assert.equal(attr(html, /<link rel="canonical" href="([^"]+)"/), `${SITE.url}${p}`, `${p}: canonical`);
+    const expectedCanonical = p === '/404.html' ? undefined : `${SITE.url}${p}`;
+    assert.equal(attr(html, /<link rel="canonical" href="([^"]+)"/), expectedCanonical, `${p}: canonical`);
     assert.equal(attr(html, /<meta property="og:url" content="([^"]+)"/), `${SITE.url}${p}`, `${p}: og:url`);
     assert.match(html, /<meta property="og:image" content="https:\/\/[^"]+og-image\.png"/, `${p}: og:image`);
     assert.match(html, /<meta name="twitter:card" content="summary_large_image">/, `${p}: twitter card`);
@@ -109,6 +110,15 @@ test('CSP-safe markup: no inline style attributes or unexpected inline scripts',
       const ok = attrs.includes('application/ld+json') || body === HEAD_SCRIPT;
       assert.ok(ok, `${p}: unexpected inline script`);
     });
+  });
+});
+
+test('copy avoids wording that could read as advertising sexual services (Criminal Code s. 286.4)', () => {
+  const RISKY = /\b(erotic|happy ending|full service|extras)\b/i;
+  pages.forEach(({ path: p, html }) => {
+    // Whole document: visible copy, meta tags and structured data alike.
+    const hit = html.match(RISKY);
+    assert.equal(hit, null, `${p}: risky wording "${hit?.[0]}"`);
   });
 });
 
