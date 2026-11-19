@@ -11,7 +11,13 @@ const CITY = SITE.address.city;
 /** Field limits — mirrored by the client-side validator (public/assets/js/booking.js). */
 export const FIELD_LIMITS = Object.freeze({ name: 80, email: 120, phone: 30, notes: 600 });
 
-const TIME_SLOTS = Object.freeze(['Afternoon (12–4pm)', 'Early evening (4–7pm)', 'Evening (7–10pm)', 'Late (after 10pm)']);
+const TIME_SLOTS = Object.freeze([
+  'Midday (11am–2pm)',
+  'Afternoon (2–6pm)',
+  'Evening (6–10pm)',
+  'Late night (10pm–1am)',
+  'After midnight (1–4am)',
+]);
 const THERAPIST_PREFS = Object.freeze(['No preference', 'Female therapist', 'Male therapist']);
 
 const SEO = Object.freeze({

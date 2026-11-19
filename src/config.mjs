@@ -46,10 +46,9 @@ export const SITE = deepFreeze({
   geo: null, // { latitude: 40.7128, longitude: -74.006 }
 
   // 24h "HH:MM". Days use schema.org names.
+  // A `closes` earlier than `opens` means closing after midnight (Google reads it the same way).
   hours: [
-    { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '12:00', closes: '22:00' },
-    { days: ['Friday', 'Saturday'], opens: '12:00', closes: '23:59' },
-    { days: ['Sunday'], opens: '14:00', closes: '21:00' },
+    { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '11:00', closes: '04:00' },
   ],
 
   currency: 'CAD', // ISO 4217
