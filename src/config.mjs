@@ -35,7 +35,7 @@ export const SITE = deepFreeze({
     street: '33 McMurchy Ave N',
     city: 'Brampton',
     region: 'ON',
-    postalCode: '', // e.g. 'L6X 1X1' — add yours (look it up on canadapost.ca)
+    postalCode: 'L6X 1X4',
     country: 'CA', // ISO 3166-1 alpha-2
     neighbourhood: '', // optional, e.g. 'Old Town' — helps local SEO
     directions: 'Discreet street-level entrance; ring the bell marked “A”.',
